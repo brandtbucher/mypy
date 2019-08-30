@@ -11,7 +11,7 @@ from abc import abstractmethod
 import sys
 
 import pytest  # type: ignore  # no pytest in typeshed
-from typing import List, Tuple, Set, Optional, Iterator, Any, Dict, Union
+from typing import List, Tuple, Set, Optional, Any, Dict, Union
 
 from data_driven import DataSuite, DataSuiteCollector, DeleteFile, TestItem, UpdateFile
 
@@ -593,36 +593,37 @@ def pytest_addoption(parser: Any) -> None:
 #     return None
 
 
-def split_test_cases(parent: 'DataSuiteCollector', suite: 'DataSuite',
-                     file: str) -> Iterator['DataDrivenTestCase']:
-    """Iterate over raw test cases in file, at collection time, ignoring sub items.
+# XXX: data-driven
+# def split_test_cases(parent: 'DataSuiteCollector', suite: 'DataSuite',
+#                      file: str) -> Iterator['DataDrivenTestCase']:
+#     """Iterate over raw test cases in file, at collection time, ignoring sub items.
 
-    The collection phase is slow, so any heavy processing should be deferred to after
-    uninteresting tests are filtered (when using -k PATTERN switch).
-    """
-    with open(file, encoding='utf-8') as f:
-        data = f.read()
-    cases = re.split(r'^\[case ([a-zA-Z_0-9]+)'
-                     r'(-writescache)?'
-                     r'(-only_when_cache|-only_when_nocache)?'
-                     r'(-posix|-windows)?'
-                     r'(-skip)?'
-                     r'\][ \t]*$\n',
-                     data,
-                     flags=re.DOTALL | re.MULTILINE)
-    line_no = cases[0].count('\n') + 1
-    for i in range(1, len(cases), 6):
-        name, writescache, only_when, platform_flag, skip, data = cases[i:i + 6]
-        platform = platform_flag[1:] if platform_flag else None
-        yield DataDrivenTestCase(parent, suite, file,
-                                 name=add_test_name_suffix(name, suite.test_name_suffix),
-                                 writescache=bool(writescache),
-                                 only_when=only_when,
-                                 platform=platform,
-                                 skip=bool(skip),
-                                 data=data,
-                                 line=line_no)
-        line_no += data.count('\n') + 1
+#     The collection phase is slow, so any heavy processing should be deferred to after
+#     uninteresting tests are filtered (when using -k PATTERN switch).
+#     """
+#     with open(file, encoding='utf-8') as f:
+#         data = f.read()
+#     cases = re.split(r'^\[case ([a-zA-Z_0-9]+)'
+#                      r'(-writescache)?'
+#                      r'(-only_when_cache|-only_when_nocache)?'
+#                      r'(-posix|-windows)?'
+#                      r'(-skip)?'
+#                      r'\][ \t]*$\n',
+#                      data,
+#                      flags=re.DOTALL | re.MULTILINE)
+#     line_no = cases[0].count('\n') + 1
+#     for i in range(1, len(cases), 6):
+#         name, writescache, only_when, platform_flag, skip, data = cases[i:i + 6]
+#         platform = platform_flag[1:] if platform_flag else None
+#         yield DataDrivenTestCase(parent, suite, file,
+#                                  name=add_test_name_suffix(name, suite.test_name_suffix),
+#                                  writescache=bool(writescache),
+#                                  only_when=only_when,
+#                                  platform=platform,
+#                                  skip=bool(skip),
+#                                  data=data,
+#                                  line=line_no)
+#         line_no += data.count('\n') + 1
 
 
 # XXX: data-driven
@@ -636,30 +637,33 @@ def split_test_cases(parent: 'DataSuiteCollector', suite: 'DataSuite',
 #             yield from split_test_cases(self, suite, os.path.join(suite.data_prefix, f))
 
 
-def add_test_name_suffix(name: str, suffix: str) -> str:
-    # Find magic suffix of form "-foobar" (used for things like "-skip").
-    m = re.search(r'-[-A-Za-z0-9]+$', name)
-    if m:
-        # Insert suite-specific test name suffix before the magic suffix
-        # which must be the last thing in the test case name since we
-        # are using endswith() checks.
-        magic_suffix = m.group(0)
-        return name[:-len(magic_suffix)] + suffix + magic_suffix
-    else:
-        return name + suffix
+# XXX: data-driven
+# def add_test_name_suffix(name: str, suffix: str) -> str:
+#     # Find magic suffix of form "-foobar" (used for things like "-skip").
+#     m = re.search(r'-[-A-Za-z0-9]+$', name)
+#     if m:
+#         # Insert suite-specific test name suffix before the magic suffix
+#         # which must be the last thing in the test case name since we
+#         # are using endswith() checks.
+#         magic_suffix = m.group(0)
+#         return name[:-len(magic_suffix)] + suffix + magic_suffix
+#     else:
+#         return name + suffix
 
 
-def is_incremental(testcase: DataDrivenTestCase) -> bool:
-    return 'incremental' in testcase.name.lower() or 'incremental' in testcase.file
+# XXX: data-driven
+# def is_incremental(testcase: DataDrivenTestCase) -> bool:
+#     return 'incremental' in testcase.name.lower() or 'incremental' in testcase.file
 
 
-def has_stable_flags(testcase: DataDrivenTestCase) -> bool:
-    if any(re.match(r'# flags[2-9]:', line) for line in testcase.input):
-        return False
-    for filename, contents in testcase.files:
-        if os.path.basename(filename).startswith('mypy.ini.'):
-            return False
-    return True
+# XXX: data-driven
+# def has_stable_flags(testcase: DataDrivenTestCase) -> bool:
+#     if any(re.match(r'# flags[2-9]:', line) for line in testcase.input):
+#         return False
+#     for filename, contents in testcase.files:
+#         if os.path.basename(filename).startswith('mypy.ini.'):
+#             return False
+#     return True
 
 
 class MypyDataSuite(DataSuite):

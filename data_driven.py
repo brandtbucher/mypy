@@ -535,17 +535,18 @@ def fix_win_path(line: str) -> str:
                                 lineno or '', message)
 
 
-def fix_cobertura_filename(line: str) -> str:
-    r"""Changes filename paths to Linux paths in Cobertura output files.
+# XXX: data-driven
+# def fix_cobertura_filename(line: str) -> str:
+#     r"""Changes filename paths to Linux paths in Cobertura output files.
 
-    E.g. filename="pkg\subpkg\a.py" -> filename="pkg/subpkg/a.py".
-    """
-    m = re.search(r'<class .* filename="(?P<filename>.*?)"', line)
-    if not m:
-        return line
-    return '{}{}{}'.format(line[:m.start(1)],
-                           m.group('filename').replace('\\', '/'),
-                           line[m.end(1):])
+#     E.g. filename="pkg\subpkg\a.py" -> filename="pkg/subpkg/a.py".
+#     """
+#     m = re.search(r'<class .* filename="(?P<filename>.*?)"', line)
+#     if not m:
+#         return line
+#     return '{}{}{}'.format(line[:m.start(1)],
+#                            m.group('filename').replace('\\', '/'),
+#                            line[m.end(1):])
 
 
 ##
@@ -643,17 +644,19 @@ def add_test_name_suffix(name: str, suffix: str) -> str:
         return name + suffix
 
 
-def is_incremental(testcase: DataDrivenTestCase) -> bool:
-    return 'incremental' in testcase.name.lower() or 'incremental' in testcase.file
+# XXX: data-driven
+# def is_incremental(testcase: DataDrivenTestCase) -> bool:
+#     return 'incremental' in testcase.name.lower() or 'incremental' in testcase.file
 
 
-def has_stable_flags(testcase: DataDrivenTestCase) -> bool:
-    if any(re.match(r'# flags[2-9]:', line) for line in testcase.input):
-        return False
-    for filename, contents in testcase.files:
-        if os.path.basename(filename).startswith('mypy.ini.'):
-            return False
-    return True
+# XXX: data-driven
+# def has_stable_flags(testcase: DataDrivenTestCase) -> bool:
+#     if any(re.match(r'# flags[2-9]:', line) for line in testcase.input):
+#         return False
+#     for filename, contents in testcase.files:
+#         if os.path.basename(filename).startswith('mypy.ini.'):
+#             return False
+#     return True
 
 
 class DataSuite:
