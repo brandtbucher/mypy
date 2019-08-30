@@ -24,7 +24,7 @@ root_dir = os.path.normpath(PREFIX)
 # UpdateFile = NamedTuple('UpdateFile', [('module', str),
 #                                        ('source_path', str),
 #                                        ('target_path', str)])
-
+#
 # # File delete operation: delete module file.
 # DeleteFile = NamedTuple('DeleteFile', [('module', str),
 #                                        ('path', str)])
@@ -390,21 +390,21 @@ def module_from_path(path: str) -> str:
 # XXX: data-driven
 # class TestItem:
 #     """Parsed test caseitem.
-
+#
 #     An item is of the form
 #       [id arg]
 #       .. data ..
 #     """
-
+#
 #     id = ''
 #     arg = ''  # type: Optional[str]
-
+#
 #     # Text data, array of 8-bit strings
 #     data = None  # type: List[str]
-
+#
 #     file = ''
 #     line = 0  # Line number in file
-
+#
 #     def __init__(self, id: str, arg: Optional[str], data: List[str],
 #                  line: int) -> None:
 #         self.id = id
@@ -580,7 +580,7 @@ def pytest_addoption(parser: Any) -> None:
 # def pytest_pycollect_makeitem(collector: Any, name: str,
 #                               obj: object) -> 'Optional[Any]':
 #     """Called by pytest on each object in modules configured in conftest.py files.
-
+#
 #     collector is pytest.Collector, returns Optional[pytest.Class]
 #     """
 #     if isinstance(obj, type):
@@ -597,7 +597,7 @@ def pytest_addoption(parser: Any) -> None:
 # def split_test_cases(parent: 'DataSuiteCollector', suite: 'DataSuite',
 #                      file: str) -> Iterator['DataDrivenTestCase']:
 #     """Iterate over raw test cases in file, at collection time, ignoring sub items.
-
+#
 #     The collection phase is slow, so any heavy processing should be deferred to after
 #     uninteresting tests are filtered (when using -k PATTERN switch).
 #     """
@@ -630,7 +630,7 @@ def pytest_addoption(parser: Any) -> None:
 # class DataSuiteCollector(pytest.Class):  # type: ignore  # inheriting from Any
 #     def collect(self) -> Iterator[pytest.Item]:  # type: ignore
 #         """Called by pytest on each of the object returned from pytest_pycollect_makeitem"""
-
+#
 #         # obj is the object for which pytest_pycollect_makeitem returned self.
 #         suite = self.obj  # type: DataSuite
 #         for f in suite.files:
