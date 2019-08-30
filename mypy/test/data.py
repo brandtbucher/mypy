@@ -13,7 +13,7 @@ import sys
 import pytest  # type: ignore  # no pytest in typeshed
 from typing import List, Tuple, Set, Optional, Iterator, Any, Dict, Union
 
-from data_driven import DataSuite, UpdateFile, DeleteFile
+from data_driven import DataSuite, DataSuiteCollector, DeleteFile, TestItem, UpdateFile
 
 from mypy.test.config import test_data_prefix, test_temp_dir, PREFIX
 
@@ -387,29 +387,30 @@ def module_from_path(path: str) -> str:
     return module
 
 
-class TestItem:
-    """Parsed test caseitem.
+# XXX: data-driven
+# class TestItem:
+#     """Parsed test caseitem.
 
-    An item is of the form
-      [id arg]
-      .. data ..
-    """
+#     An item is of the form
+#       [id arg]
+#       .. data ..
+#     """
 
-    id = ''
-    arg = ''  # type: Optional[str]
+#     id = ''
+#     arg = ''  # type: Optional[str]
 
-    # Text data, array of 8-bit strings
-    data = None  # type: List[str]
+#     # Text data, array of 8-bit strings
+#     data = None  # type: List[str]
 
-    file = ''
-    line = 0  # Line number in file
+#     file = ''
+#     line = 0  # Line number in file
 
-    def __init__(self, id: str, arg: Optional[str], data: List[str],
-                 line: int) -> None:
-        self.id = id
-        self.arg = arg
-        self.data = data
-        self.line = line
+#     def __init__(self, id: str, arg: Optional[str], data: List[str],
+#                  line: int) -> None:
+#         self.id = id
+#         self.arg = arg
+#         self.data = data
+#         self.line = line
 
 
 def parse_test_data(raw_data: str, name: str) -> List[TestItem]:
@@ -573,22 +574,23 @@ def pytest_addoption(parser: Any) -> None:
                     help='Display C code on mypyc test failures')
 
 
-# This function name is special to pytest.  See
-# http://doc.pytest.org/en/latest/writing_plugins.html#collection-hooks
-def pytest_pycollect_makeitem(collector: Any, name: str,
-                              obj: object) -> 'Optional[Any]':
-    """Called by pytest on each object in modules configured in conftest.py files.
+# XXX: data-driven
+# # This function name is special to pytest.  See
+# # http://doc.pytest.org/en/latest/writing_plugins.html#collection-hooks
+# def pytest_pycollect_makeitem(collector: Any, name: str,
+#                               obj: object) -> 'Optional[Any]':
+#     """Called by pytest on each object in modules configured in conftest.py files.
 
-    collector is pytest.Collector, returns Optional[pytest.Class]
-    """
-    if isinstance(obj, type):
-        # Only classes derived from DataSuite contain test cases, not the DataSuite class itself
-        if issubclass(obj, DataSuite) and obj is not DataSuite:
-            # Non-None result means this obj is a test case.
-            # The collect method of the returned DataSuiteCollector instance will be called later,
-            # with self.obj being obj.
-            return DataSuiteCollector(name, parent=collector)
-    return None
+#     collector is pytest.Collector, returns Optional[pytest.Class]
+#     """
+#     if isinstance(obj, type):
+#         # Only classes derived from DataSuite contain test cases, not the DataSuite class itself
+#         if issubclass(obj, DataSuite) and obj is not DataSuite:
+#             # Non-None result means this obj is a test case.
+#             # The collect method of the returned DataSuiteCollector instance will be called
+#             # later, with self.obj being obj.
+#             return DataSuiteCollector(name, parent=collector)
+#     return None
 
 
 def split_test_cases(parent: 'DataSuiteCollector', suite: 'DataSuite',
@@ -623,14 +625,15 @@ def split_test_cases(parent: 'DataSuiteCollector', suite: 'DataSuite',
         line_no += data.count('\n') + 1
 
 
-class DataSuiteCollector(pytest.Class):  # type: ignore  # inheriting from Any
-    def collect(self) -> Iterator[pytest.Item]:  # type: ignore
-        """Called by pytest on each of the object returned from pytest_pycollect_makeitem"""
+# XXX: data-driven
+# class DataSuiteCollector(pytest.Class):  # type: ignore  # inheriting from Any
+#     def collect(self) -> Iterator[pytest.Item]:  # type: ignore
+#         """Called by pytest on each of the object returned from pytest_pycollect_makeitem"""
 
-        # obj is the object for which pytest_pycollect_makeitem returned self.
-        suite = self.obj  # type: DataSuite
-        for f in suite.files:
-            yield from split_test_cases(self, suite, os.path.join(suite.data_prefix, f))
+#         # obj is the object for which pytest_pycollect_makeitem returned self.
+#         suite = self.obj  # type: DataSuite
+#         for f in suite.files:
+#             yield from split_test_cases(self, suite, os.path.join(suite.data_prefix, f))
 
 
 def add_test_name_suffix(name: str, suffix: str) -> str:
