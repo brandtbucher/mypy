@@ -13,7 +13,7 @@ from mypy.nodes import MypyFile, Expression
 from mypy.options import Options
 from mypy.server.deps import get_dependencies
 from mypy.test.config import test_temp_dir
-from mypy.test.data import DataDrivenTestCase, DataSuite
+from mypy.test.data import DataDrivenTestCase, MypyDataSuite
 from mypy.test.helpers import assert_string_arrays_equal, parse_options
 from mypy.types import Type
 from mypy.typestate import TypeState
@@ -22,7 +22,7 @@ from mypy.typestate import TypeState
 dumped_modules = ['__main__', 'pkg', 'pkg.mod']
 
 
-class GetDependenciesSuite(DataSuite):
+class GetDependenciesSuite(MypyDataSuite):
     files = [
         'deps.test',
         'deps-types.test',

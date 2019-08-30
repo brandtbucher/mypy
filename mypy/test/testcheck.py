@@ -11,7 +11,7 @@ from mypy.build import Graph
 from mypy.modulefinder import BuildSource, SearchPaths, FindModuleCache
 from mypy.test.config import test_temp_dir, test_data_prefix
 from mypy.test.data import (
-    DataDrivenTestCase, DataSuite, FileOperation, UpdateFile, module_from_path
+    DataDrivenTestCase, MypyDataSuite, FileOperation, UpdateFile, module_from_path
 )
 from mypy.test.helpers import (
     assert_string_arrays_equal, normalize_error_messages, assert_module_equivalence,
@@ -99,7 +99,7 @@ if sys.platform in ('darwin', 'win32'):
     typecheck_files.append('check-modules-case.test')
 
 
-class TypeCheckSuite(DataSuite):
+class TypeCheckSuite(MypyDataSuite):
     files = typecheck_files
 
     def run_case(self, testcase: DataDrivenTestCase) -> None:

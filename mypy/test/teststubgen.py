@@ -11,7 +11,7 @@ from typing import Any, List, Tuple, Optional
 from mypy.test.helpers import (
     Suite, assert_equal, assert_string_arrays_equal, local_sys_path_set
 )
-from mypy.test.data import DataSuite, DataDrivenTestCase
+from mypy.test.data import MypyDataSuite, DataDrivenTestCase
 from mypy.errors import CompileError
 from mypy.stubgen import (
     generate_stubs, parse_options, Options, collect_build_targets,
@@ -271,7 +271,7 @@ class StubgenUtilSuite(Suite):
         assert_equal(infer_prop_type_from_docstring('\nstr: A string.'), None)
 
 
-class StubgenPythonSuite(DataSuite):
+class StubgenPythonSuite(MypyDataSuite):
     required_out_section = True
     base_path = '.'
     files = ['stubgen.test']

@@ -17,7 +17,7 @@ from mypy.server.subexpr import get_subexpressions
 from mypy.server.update import FineGrainedBuildManager
 from mypy.strconv import StrConv
 from mypy.test.config import test_temp_dir
-from mypy.test.data import DataDrivenTestCase, DataSuite
+from mypy.test.data import DataDrivenTestCase, MypyDataSuite
 from mypy.test.helpers import assert_string_arrays_equal, normalize_error_messages, parse_options
 from mypy.types import TypeStrVisitor, Type
 from mypy.util import short_type, IdMapper
@@ -42,7 +42,7 @@ NOT_DUMPED_MODULES = (
 )
 
 
-class ASTMergeSuite(DataSuite):
+class ASTMergeSuite(MypyDataSuite):
     files = ['merge.test']
 
     def setup(self) -> None:

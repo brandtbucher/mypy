@@ -5,7 +5,7 @@ import re
 from mypy import build
 from mypy.modulefinder import BuildSource
 from mypy.test.config import test_temp_dir
-from mypy.test.data import DataDrivenTestCase, DataSuite
+from mypy.test.data import DataDrivenTestCase, MypyDataSuite
 from mypy.test.helpers import assert_string_arrays_equal
 from mypy.test.visitors import SkippedNodeSearcher, ignore_node
 from mypy.util import short_type
@@ -14,7 +14,7 @@ from mypy.errors import CompileError
 from mypy.options import Options
 
 
-class TypeExportSuite(DataSuite):
+class TypeExportSuite(MypyDataSuite):
     required_out_section = True
     files = ['typexport-basic.test']
 

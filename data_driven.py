@@ -13,7 +13,7 @@ import sys
 import pytest  # type: ignore  # no pytest in typeshed
 from typing import List, Tuple, Set, Optional, Iterator, Any, Dict, NamedTuple, Union
 
-from mypy.test.config import test_data_prefix, test_temp_dir, PREFIX
+from mypy.test.config import test_temp_dir, PREFIX
 
 root_dir = os.path.normpath(PREFIX)
 
@@ -573,14 +573,14 @@ def pytest_addoption(parser: Any) -> None:
 # This function name is special to pytest.  See
 # http://doc.pytest.org/en/latest/writing_plugins.html#collection-hooks
 def pytest_pycollect_makeitem(collector: Any, name: str,
-                              obj: object) -> 'Optional[Any]':
+                              obj: Any) -> 'Optional[Any]':
     """Called by pytest on each object in modules configured in conftest.py files.
 
     collector is pytest.Collector, returns Optional[pytest.Class]
     """
     if isinstance(obj, type):
         # Only classes derived from DataSuite contain test cases, not the DataSuite class itself
-        if issubclass(obj, DataSuite) and obj is not DataSuite:
+        if issubclass(obj, DataSuite) and obj is not DataSuite and obj.files:
             # Non-None result means this obj is a test case.
             # The collect method of the returned DataSuiteCollector instance will be called later,
             # with self.obj being obj.
@@ -660,10 +660,10 @@ class DataSuite:
     # option fields - class variables
     files = None  # type: List[str]
 
-    base_path = test_temp_dir
+    base_path = None  # type: str
 
     # Allow external users of the test code to override the data prefix
-    data_prefix = test_data_prefix
+    data_prefix = None  # type: str
 
     required_out_section = False
 

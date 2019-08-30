@@ -10,7 +10,7 @@ from mypy.defaults import PYTHON3_VERSION
 from mypy.test.helpers import (
     assert_string_arrays_equal, normalize_error_messages, testfile_pyversion, parse_options
 )
-from mypy.test.data import DataDrivenTestCase, DataSuite
+from mypy.test.data import DataDrivenTestCase, MypyDataSuite
 from mypy.test.config import test_temp_dir
 from mypy.errors import CompileError
 from mypy.nodes import TypeInfo
@@ -44,7 +44,7 @@ def get_semanal_options(program_text: str, testcase: DataDrivenTestCase) -> Opti
     return options
 
 
-class SemAnalSuite(DataSuite):
+class SemAnalSuite(MypyDataSuite):
     files = semanal_files
     native_sep = True
 
@@ -99,7 +99,7 @@ def test_semanal(testcase: DataDrivenTestCase) -> None:
 
 # Semantic analyzer error test cases
 
-class SemAnalErrorSuite(DataSuite):
+class SemAnalErrorSuite(MypyDataSuite):
     files = ['semanal-errors.test']
 
     def run_case(self, testcase: DataDrivenTestCase) -> None:
@@ -129,7 +129,7 @@ def test_semanal_error(testcase: DataDrivenTestCase) -> None:
 
 # SymbolNode table export test cases
 
-class SemAnalSymtableSuite(DataSuite):
+class SemAnalSymtableSuite(MypyDataSuite):
     required_out_section = True
     files = ['semanal-symtable.test']
 
@@ -159,7 +159,7 @@ class SemAnalSymtableSuite(DataSuite):
 
 
 # Type info export test cases
-class SemAnalTypeInfoSuite(DataSuite):
+class SemAnalTypeInfoSuite(MypyDataSuite):
     required_out_section = True
     files = ['semanal-typeinfo.test']
 

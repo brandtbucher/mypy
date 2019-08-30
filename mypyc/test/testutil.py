@@ -10,7 +10,7 @@ from typing import List, Callable, Iterator, Optional, Tuple
 from mypy import build
 from mypy.errors import CompileError
 from mypy.options import Options
-from mypy.test.data import DataSuite, DataDrivenTestCase
+from mypy.test.data import MypyDataSuite, DataDrivenTestCase
 from mypy.test.config import test_temp_dir
 from mypy.test.helpers import assert_string_arrays_equal
 
@@ -25,7 +25,7 @@ ICODE_GEN_BUILTINS = os.path.join(test_data_prefix, 'fixtures/ir.py')
 TESTUTIL_PATH = os.path.join(test_data_prefix, 'fixtures/testutil.py')
 
 
-class MypycDataSuite(DataSuite):
+class MypycDataSuite(MypyDataSuite):
     # Need to list no files, since this will be picked up as a suite of tests
     files = []  # type: List[str]
     data_prefix = test_data_prefix

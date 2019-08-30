@@ -11,20 +11,23 @@ from abc import abstractmethod
 import sys
 
 import pytest  # type: ignore  # no pytest in typeshed
-from typing import List, Tuple, Set, Optional, Iterator, Any, Dict, NamedTuple, Union
+from typing import List, Tuple, Set, Optional, Iterator, Any, Dict, Union
+
+from data_driven import DataSuite, UpdateFile, DeleteFile
 
 from mypy.test.config import test_data_prefix, test_temp_dir, PREFIX
 
 root_dir = os.path.normpath(PREFIX)
 
-# File modify/create operation: copy module contents from source_path.
-UpdateFile = NamedTuple('UpdateFile', [('module', str),
-                                       ('source_path', str),
-                                       ('target_path', str)])
+# XXX: data-driven
+# # File modify/create operation: copy module contents from source_path.
+# UpdateFile = NamedTuple('UpdateFile', [('module', str),
+#                                        ('source_path', str),
+#                                        ('target_path', str)])
 
-# File delete operation: delete module file.
-DeleteFile = NamedTuple('DeleteFile', [('module', str),
-                                       ('path', str)])
+# # File delete operation: delete module file.
+# DeleteFile = NamedTuple('DeleteFile', [('module', str),
+#                                        ('path', str)])
 
 FileOperation = Union[UpdateFile, DeleteFile]
 
@@ -656,7 +659,7 @@ def has_stable_flags(testcase: DataDrivenTestCase) -> bool:
     return True
 
 
-class DataSuite:
+class MypyDataSuite(DataSuite):
     # option fields - class variables
     files = None  # type: List[str]
 

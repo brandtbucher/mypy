@@ -1,7 +1,7 @@
 import os.path
 
 pytest_plugins = [
-    'mypy.test.data',
+    'data_driven',
 ]
 
 

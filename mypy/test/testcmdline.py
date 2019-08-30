@@ -12,7 +12,7 @@ import sys
 from typing import List
 
 from mypy.test.config import test_temp_dir, PREFIX
-from mypy.test.data import DataDrivenTestCase, DataSuite
+from mypy.test.data import DataDrivenTestCase, MypyDataSuite
 from mypy.test.helpers import (
     assert_string_arrays_equal, normalize_error_messages, check_test_output_files
 )
@@ -27,7 +27,7 @@ cmdline_files = [
 ]
 
 
-class PythonCmdlineSuite(DataSuite):
+class PythonCmdlineSuite(MypyDataSuite):
     files = cmdline_files
     native_sep = True
 

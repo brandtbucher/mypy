@@ -23,7 +23,7 @@ from mypy.errors import CompileError
 from mypy.options import Options
 from mypy.test.config import test_temp_dir
 from mypy.test.data import (
-    DataDrivenTestCase, DataSuite, UpdateFile
+    DataDrivenTestCase, MypyDataSuite, UpdateFile
 )
 from mypy.test.helpers import (
     assert_string_arrays_equal, parse_options, copy_and_fudge_mtime, assert_module_equivalence,
@@ -41,7 +41,7 @@ import pytest  # type: ignore  # no pytest in typeshed
 CHECK_CONSISTENCY = False
 
 
-class FineGrainedSuite(DataSuite):
+class FineGrainedSuite(MypyDataSuite):
     files = [
         'fine-grained.test',
         'fine-grained-cycles.test',

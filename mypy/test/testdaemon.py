@@ -10,7 +10,7 @@ import sys
 from typing import List, Tuple
 
 from mypy.test.config import test_temp_dir, PREFIX
-from mypy.test.data import DataDrivenTestCase, DataSuite
+from mypy.test.data import DataDrivenTestCase, MypyDataSuite
 from mypy.test.helpers import assert_string_arrays_equal
 
 # Files containing test cases descriptions.
@@ -19,7 +19,7 @@ daemon_files = [
 ]
 
 
-class DaemonSuite(DataSuite):
+class DaemonSuite(MypyDataSuite):
     files = daemon_files
 
     def run_case(self, testcase: DataDrivenTestCase) -> None:

@@ -11,11 +11,11 @@ from mypy.nodes import MypyFile
 from mypy.options import Options
 from mypy.server.astdiff import snapshot_symbol_table, compare_symbol_table_snapshots
 from mypy.test.config import test_temp_dir
-from mypy.test.data import DataDrivenTestCase, DataSuite
+from mypy.test.data import DataDrivenTestCase, MypyDataSuite
 from mypy.test.helpers import assert_string_arrays_equal, parse_options
 
 
-class ASTDiffSuite(DataSuite):
+class ASTDiffSuite(MypyDataSuite):
     files = ['diff.test']
 
     def run_case(self, testcase: DataDrivenTestCase) -> None:

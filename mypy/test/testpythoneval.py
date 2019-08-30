@@ -24,7 +24,7 @@ from typing import List
 
 from mypy.defaults import PYTHON3_VERSION
 from mypy.test.config import test_temp_dir
-from mypy.test.data import DataDrivenTestCase, DataSuite
+from mypy.test.data import DataDrivenTestCase, MypyDataSuite
 from mypy.test.helpers import assert_string_arrays_equal, split_lines
 from mypy.util import try_find_python2_interpreter
 from mypy import api
@@ -34,7 +34,7 @@ python3_path = sys.executable
 program_re = re.compile(r'\b_program.py\b')
 
 
-class PythonEvaluationSuite(DataSuite):
+class PythonEvaluationSuite(MypyDataSuite):
     files = ['pythoneval.test',
              'python2eval.test',
              'pythoneval-asyncio.test']

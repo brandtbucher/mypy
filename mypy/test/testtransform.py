@@ -7,13 +7,13 @@ from mypy.modulefinder import BuildSource
 from mypy.test.helpers import (
     assert_string_arrays_equal, normalize_error_messages, parse_options
 )
-from mypy.test.data import DataDrivenTestCase, DataSuite
+from mypy.test.data import DataDrivenTestCase, MypyDataSuite
 from mypy.test.config import test_temp_dir
 from mypy.test.visitors import TypeAssertTransformVisitor
 from mypy.errors import CompileError
 
 
-class TransformSuite(DataSuite):
+class TransformSuite(MypyDataSuite):
     required_out_section = True
     # Reuse semantic analysis test cases.
     files = ['semanal-basic.test',

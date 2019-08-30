@@ -2,13 +2,13 @@
 
 from mypy import defaults
 from mypy.test.helpers import assert_string_arrays_equal
-from mypy.test.data import DataDrivenTestCase, DataSuite
+from mypy.test.data import DataDrivenTestCase, MypyDataSuite
 from mypy.parse import parse
 from mypy.errors import CompileError
 from mypy.options import Options
 
 
-class ParserSuite(DataSuite):
+class ParserSuite(MypyDataSuite):
     required_out_section = True
     base_path = '.'
     files = ['parse.test',
@@ -49,7 +49,7 @@ def test_parser(testcase: DataDrivenTestCase) -> None:
 INPUT_FILE_NAME = 'file'
 
 
-class ParseErrorSuite(DataSuite):
+class ParseErrorSuite(MypyDataSuite):
     required_out_section = True
     base_path = '.'
     files = ['parse-errors.test']

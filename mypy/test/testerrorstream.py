@@ -3,13 +3,13 @@ from typing import List
 
 from mypy import build
 from mypy.test.helpers import assert_string_arrays_equal
-from mypy.test.data import DataDrivenTestCase, DataSuite
+from mypy.test.data import DataDrivenTestCase, MypyDataSuite
 from mypy.modulefinder import BuildSource
 from mypy.errors import CompileError
 from mypy.options import Options
 
 
-class ErrorStreamSuite(DataSuite):
+class ErrorStreamSuite(MypyDataSuite):
     required_out_section = True
     base_path = '.'
     files = ['errorstream.test']
