@@ -7,7 +7,6 @@ import posixpath
 import re
 from os import remove, rmdir
 import shutil
-from abc import abstractmethod
 import sys
 
 import pytest  # type: ignore  # no pytest in typeshed
@@ -559,19 +558,20 @@ def fix_cobertura_filename(line: str) -> str:
 ##
 
 
-# This function name is special to pytest.  See
-# https://docs.pytest.org/en/latest/reference.html#initialization-hooks
-def pytest_addoption(parser: Any) -> None:
-    group = parser.getgroup('mypy')
-    group.addoption('--update-data', action='store_true', default=False,
-                    help='Update test data to reflect actual output'
-                         ' (supported only for certain tests)')
-    group.addoption('--save-failures-to', default=None,
-                    help='Copy the temp directories from failing tests to a target directory')
-    group.addoption('--mypy-verbose', action='count',
-                    help='Set the verbose flag when creating mypy Options')
-    group.addoption('--mypyc-showc', action='store_true', default=False,
-                    help='Display C code on mypyc test failures')
+# XXX: data-driven
+# # This function name is special to pytest.  See
+# # https://docs.pytest.org/en/latest/reference.html#initialization-hooks
+# def pytest_addoption(parser: Any) -> None:
+#     group = parser.getgroup('mypy')
+#     group.addoption('--update-data', action='store_true', default=False,
+#                     help='Update test data to reflect actual output'
+#                          ' (supported only for certain tests)')
+#     group.addoption('--save-failures-to', default=None,
+#                     help='Copy the temp directories from failing tests to a target directory')
+#     group.addoption('--mypy-verbose', action='count',
+#                     help='Set the verbose flag when creating mypy Options')
+#     group.addoption('--mypyc-showc', action='store_true', default=False,
+#                     help='Display C code on mypyc test failures')
 
 
 # XXX: data-driven
@@ -667,26 +667,30 @@ def pytest_addoption(parser: Any) -> None:
 
 
 class MypyDataSuite(DataSuite):
-    # option fields - class variables
-    files = None  # type: List[str]
+    # XXX: data-driven
+    # # option fields - class variables
+    # files = None  # type: List[str]
 
     base_path = test_temp_dir
 
     # Allow external users of the test code to override the data prefix
     data_prefix = test_data_prefix
 
-    required_out_section = False
+    root_dir = root_dir
 
-    native_sep = False
-
-    # Name suffix automatically added to each test case in the suite (can be
-    # used to distinguish test cases in suites that share data files)
-    test_name_suffix = ''
-
-    def setup(self) -> None:
-        """Setup fixtures (ad-hoc)"""
-        pass
-
-    @abstractmethod
-    def run_case(self, testcase: DataDrivenTestCase) -> None:
-        raise NotImplementedError
+    # XXX: data-driven
+    # required_out_section = False
+    #
+    # native_sep = False
+    #
+    # # Name suffix automatically added to each test case in the suite (can be
+    # # used to distinguish test cases in suites that share data files)
+    # test_name_suffix = ''
+    #
+    # def setup(self) -> None:
+    #     """Setup fixtures (ad-hoc)"""
+    #     pass
+    #
+    # @abstractmethod
+    # def run_case(self, testcase: DataDrivenTestCase) -> None:
+    #     raise NotImplementedError

@@ -13,9 +13,10 @@ import sys
 import pytest  # type: ignore  # no pytest in typeshed
 from typing import List, Tuple, Set, Optional, Iterator, Any, Dict, NamedTuple, Union
 
-from mypy.test.config import test_temp_dir, PREFIX
-
-root_dir = os.path.normpath(PREFIX)
+# XXX: data-driven
+# from mypy.test.config import test_temp_dir, PREFIX
+#
+# root_dir = os.path.normpath(PREFIX)
 
 # File modify/create operation: copy module contents from source_path.
 UpdateFile = NamedTuple('UpdateFile', [('module', str),
@@ -36,6 +37,7 @@ def parse_test_case(case: 'DataDrivenTestCase') -> None:
     """
     test_items = parse_test_data(case.data, case.name)
     base_path = case.suite.base_path
+    root_dir = case.suite.root_dir
     if case.suite.native_sep:
         join = os.path.join
     else:
@@ -61,7 +63,7 @@ def parse_test_case(case: 'DataDrivenTestCase') -> None:
         if item.id == 'file' or item.id == 'outfile':
             # Record an extra file needed for the test case.
             assert item.arg is not None
-            contents = expand_variables('\n'.join(item.data))
+            contents = expand_variables('\n'.join(item.data), root_dir=root_dir)
             file_entry = (join(base_path, item.arg), contents)
             if item.id == 'file':
                 files.append(file_entry)
@@ -108,9 +110,9 @@ def parse_test_case(case: 'DataDrivenTestCase') -> None:
             if item.arg == 'skip-path-normalization':
                 normalize_output = False
 
-            tmp_output = [expand_variables(line) for line in item.data]
+            tmp_output = [expand_variables(line, root_dir=root_dir) for line in item.data]
             if os.path.sep == '\\' and normalize_output:
-                tmp_output = [fix_win_path(line) for line in tmp_output]
+                tmp_output = [fix_win_path(line, root_dir=root_dir) for line in tmp_output]
             if item.id == 'out' or item.id == 'out1':
                 output = tmp_output
             else:
@@ -234,9 +236,10 @@ class DataDrivenTestCase(pytest.Item):  # type: ignore  # inheriting from Any
     def setup(self) -> None:
         parse_test_case(case=self)
         self.old_cwd = os.getcwd()
-        self.tmpdir = tempfile.TemporaryDirectory(prefix='mypy-test-')
+        self.tmpdir = tempfile.TemporaryDirectory(prefix='data-driven-test-')
         os.chdir(self.tmpdir.name)
-        os.mkdir(test_temp_dir)
+        if not os.path.exists(self.suite.base_path):
+            os.mkdir(self.suite.base_path)
         encountered_files = set()
         self.clean_up = []
         for paths in self.deleted_paths.values():
@@ -316,7 +319,7 @@ class DataDrivenTestCase(pytest.Item):  # type: ignore  # inheriting from Any
                     path = error.filename
                     # Be defensive -- only call rmtree if we're sure we aren't removing anything
                     # valuable.
-                    if path.startswith(test_temp_dir + '/') and os.path.isdir(path):
+                    if path.startswith(self.suite.base_path + '/') and os.path.isdir(path):
                         shutil.rmtree(path)
                     raise
         assert self.old_cwd is not None and self.tmpdir is not None, \
@@ -377,7 +380,7 @@ def module_from_path(path: str) -> str:
     path = re.sub(r'\.pyi?$', '', path)
     # We can have a mix of Unix-style and Windows-style separators.
     parts = re.split(r'[/\\]', path)
-    assert parts[0] == test_temp_dir
+    # assert parts[0] == test_temp_dir
     del parts[0]
     module = '.'.join(parts)
     module = re.sub(r'\.__init__$', '', module)
@@ -485,7 +488,7 @@ def collapse_line_continuation(l: List[str]) -> List[str]:
     return r
 
 
-def expand_variables(s: str) -> str:
+def expand_variables(s: str, root_dir: str) -> str:
     return s.replace('<ROOT>', root_dir)
 
 
@@ -520,7 +523,7 @@ def expand_errors(input: List[str], output: List[str], fnam: str) -> None:
                         fnam, i + 1, col, severity, message))
 
 
-def fix_win_path(line: str) -> str:
+def fix_win_path(line: str, root_dir: str) -> str:
     r"""Changes Windows paths to Linux paths in error messages.
 
     E.g. foo\bar.py -> foo/bar.py.
@@ -559,16 +562,17 @@ def fix_win_path(line: str) -> str:
 # This function name is special to pytest.  See
 # https://docs.pytest.org/en/latest/reference.html#initialization-hooks
 def pytest_addoption(parser: Any) -> None:
-    group = parser.getgroup('mypy')
+    group = parser.getgroup('data-driven')
     group.addoption('--update-data', action='store_true', default=False,
                     help='Update test data to reflect actual output'
                          ' (supported only for certain tests)')
     group.addoption('--save-failures-to', default=None,
                     help='Copy the temp directories from failing tests to a target directory')
-    group.addoption('--mypy-verbose', action='count',
-                    help='Set the verbose flag when creating mypy Options')
-    group.addoption('--mypyc-showc', action='store_true', default=False,
-                    help='Display C code on mypyc test failures')
+    # XXX: data-driven
+    # group.addoption('--mypy-verbose', action='count',
+    #                 help='Set the verbose flag when creating mypy Options')
+    # group.addoption('--mypyc-showc', action='store_true', default=False,
+    #                 help='Display C code on mypyc test failures')
 
 
 # This function name is special to pytest.  See
@@ -667,6 +671,8 @@ class DataSuite:
 
     # Allow external users of the test code to override the data prefix
     data_prefix = None  # type: str
+
+    root_dir = None  # type: str
 
     required_out_section = False
 

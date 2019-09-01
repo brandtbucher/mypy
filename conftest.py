@@ -16,3 +16,8 @@ def pytest_configure(config):
 def pytest_addoption(parser) -> None:
     parser.addoption('--bench', action='store_true', default=False,
                      help='Enable the benchmark test runs')
+    group = parser.getgroup('mypy')
+    group.addoption('--mypy-verbose', action='count',
+                    help='Set the verbose flag when creating mypy Options')
+    group.addoption('--mypyc-showc', action='store_true', default=False,
+                    help='Display C code on mypyc test failures')
