@@ -13,10 +13,6 @@ import sys
 import pytest  # type: ignore  # no pytest in typeshed
 from typing import List, Tuple, Set, Optional, Iterator, Any, Dict, NamedTuple, Union
 
-# XXX: data-driven
-# from mypy.test.config import test_temp_dir, PREFIX
-#
-# root_dir = os.path.normpath(PREFIX)
 
 # File modify/create operation: copy module contents from source_path.
 UpdateFile = NamedTuple('UpdateFile', [('module', str),
@@ -538,20 +534,6 @@ def fix_win_path(line: str, root_dir: str) -> str:
                                 lineno or '', message)
 
 
-# XXX: data-driven
-# def fix_cobertura_filename(line: str) -> str:
-#     r"""Changes filename paths to Linux paths in Cobertura output files.
-#
-#     E.g. filename="pkg\subpkg\a.py" -> filename="pkg/subpkg/a.py".
-#     """
-#     m = re.search(r'<class .* filename="(?P<filename>.*?)"', line)
-#     if not m:
-#         return line
-#     return '{}{}{}'.format(line[:m.start(1)],
-#                            m.group('filename').replace('\\', '/'),
-#                            line[m.end(1):])
-
-
 ##
 #
 # pytest setup
@@ -568,11 +550,6 @@ def pytest_addoption(parser: Any) -> None:
                          ' (supported only for certain tests)')
     group.addoption('--save-failures-to', default=None,
                     help='Copy the temp directories from failing tests to a target directory')
-    # XXX: data-driven
-    # group.addoption('--mypy-verbose', action='count',
-    #                 help='Set the verbose flag when creating mypy Options')
-    # group.addoption('--mypyc-showc', action='store_true', default=False,
-    #                 help='Display C code on mypyc test failures')
 
 
 # This function name is special to pytest.  See
@@ -646,21 +623,6 @@ def add_test_name_suffix(name: str, suffix: str) -> str:
         return name[:-len(magic_suffix)] + suffix + magic_suffix
     else:
         return name + suffix
-
-
-# XXX: data-driven
-# def is_incremental(testcase: DataDrivenTestCase) -> bool:
-#     return 'incremental' in testcase.name.lower() or 'incremental' in testcase.file
-
-
-# XXX: data-driven
-# def has_stable_flags(testcase: DataDrivenTestCase) -> bool:
-#     if any(re.match(r'# flags[2-9]:', line) for line in testcase.input):
-#         return False
-#     for filename, contents in testcase.files:
-#         if os.path.basename(filename).startswith('mypy.ini.'):
-#             return False
-#     return True
 
 
 class DataSuite:
